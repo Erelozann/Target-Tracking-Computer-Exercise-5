@@ -148,10 +148,10 @@ for MC = 1:MC_Num
  x_k(:,1,MC) = x0_bar + chol_P0_bar*randn(4,1); % True Target Data Generation
  y_k_1(:,1) = H*x_k(:,1,MC)+ chol_R*randn(2,1);
  y_k_2(:,1) = H*x_k(:,1,MC)+ chol_R*randn(2,1);
-    for i=1:Step_Num-1
-        x_k(:,i+1,MC) = F*x_k(:,i,MC) + G*(sigma_a*randn(2,1)); % True Target Data Generation
-        y_k_1(:,i+1,MC) = H*x_k(:,i,MC)+ chol_R*randn(2,1);
-        y_k_2(:,i+1,MC) = H*x_k(:,i,MC)+ chol_R*randn(2,1);
+    for i=2:Step_Num
+        x_k(:,i,MC) = F*x_k(:,i-1,MC) + G*(sigma_a*randn(2,1)); % True Target Data Generation
+        y_k_1(:,i,MC) = H*x_k(:,i,MC)+ chol_R*randn(2,1);
+        y_k_2(:,i,MC) = H*x_k(:,i,MC)+ chol_R*randn(2,1);
     end
 end
 
@@ -466,81 +466,3 @@ plot(time,err_channel_mean(4,:));
 plot(time,err_cov_int_mean(4,:));
 legend({'Centralized', 'Decentralized','Channel Filter','Covariance Intersection'}, 'fontsize', 10);
 ylabel('RMS of Velocity Y', 'fontsize', 12); grid on; xlabel('Time', 'fontsize', 12); grid on;
-% 
-% subplot(2,1,2); hold on;
-% plot(time, trueTarget(4,:), 'linewidth', 2);
-% plot(time, x_est_avg(3,:), '--', 'linewidth', 2);
-% ylabel('X velocity', 'fontsize', 12); xlabel('Time', 'fontsize', 12); grid on;
-% 
-% figure
-% subplot(2,1,1); hold on;
-% plot(time, trueTarget(3,:), 'linewidth', 2);
-% plot(time, x_est_avg(2,:), '--', 'linewidth', 2);
-% legend({'True', 'Estimated'}, 'fontsize', 12);
-% ylabel('Y position', 'fontsize', 12); grid on;
-% 
-% subplot(2,1,2); hold on;
-% plot(time, trueTarget(5,:), 'linewidth', 2);
-% plot(time, x_est_avg(4,:), '--', 'linewidth', 2);
-% ylabel('Y velocity', 'fontsize', 12); xlabel('Time', 'fontsize', 12); grid on;
-% 
-% 
-% figure
-% subplot(2,1,1); hold on;
-% plot(time, x_RMSE(1,:), 'linewidth', 2);
-% plot(time, sqrt(P_diag(1,:)), '--', 'linewidth', 2);
-% legend({'RMSE', 'Estimated'}, 'fontsize', 12);
-% ylabel('X position error std', 'fontsize', 12); grid on;
-% 
-% subplot(2,1,2); hold on;
-% plot(time, x_RMSE(3,:), 'linewidth', 2);
-% plot(time, sqrt(P_diag(3,:)), '--', 'linewidth', 2);
-% ylabel('X velocity error std', 'fontsize', 12); xlabel('Time', 'fontsize', 12); grid on;
-% 
-% 
-% figure
-% subplot(2,1,1); hold on;
-% plot(time, x_RMSE(2,:), 'linewidth', 2);
-% plot(time, sqrt(P_diag(2,:)), '--', 'linewidth', 2);
-% legend({'RMSE', 'Estimated'}, 'fontsize', 12);
-% ylabel('Y position error std', 'fontsize', 12); grid on;
-% 
-% subplot(2,1,2); hold on;
-% plot(time, x_RMSE(4,:), 'linewidth', 2);
-% plot(time, sqrt(P_diag(4,:)), '--', 'linewidth', 2);
-% ylabel('Y velocity error std', 'fontsize', 12); xlabel('Time', 'fontsize', 12); grid on;
-% 
-% figure
-% plot(truePlatform(2,:), truePlatform(3,:), 'linewidth', 2); hold on;
-% plot(trueTarget(2,:), trueTarget(3,:),'o', 'linewidth', 2); hold on;
-% legend({'Sensor', 'Target'}, 'fontsize', 12);
-% xlabel('X', 'fontsize', 12); ylabel('Y', 'fontsize', 12);
-% axis equal;
-% 
-% 
-% figure
-% plot(truePlatform(2,:)/NM, truePlatform(3,:)/NM, 'linewidth', 2); hold on;
-% plot(trueTarget(2,:)/NM, trueTarget(3,:)/NM,'o', 'linewidth', 2); hold on;
-% legend({'Radar', 'Hedef'}, 'fontsize', 12);
-% xlabel('X (Deniz mili)', 'fontsize', 12); ylabel('Y (Deniz mili)', 'fontsize', 12);
-% axis equal;
-% title('Takip Senaryosunun Ýki Boyutlu Düzleme Ýzdüþümü', 'fontsize', 16)
-% 
-% 
-% figure
-% plot(time,RangeStdDev/feet, 'linewidth', 2); hold on;
-% plot(time,10*ones(size(RangeStdDev)), 'linewidth', 2); hold on;
-% %plot(time,x_RMSE(1,:), 'linewidth', 2); hold on;
-% legend({'Achieved', 'Required'}, 'fontsize', 12);
-% ylabel('Root Mean Square Error (feets)', 'fontsize', 12); xlabel('Time (seconds)', 'fontsize', 12); grid on;
-% 
-% 
-% figure
-% title('Sabit Hedef Takip Hassasiyeti', 'fontsize', 24)
-% plot(time,RangeStdDev/feet, 'linewidth', 2); hold on;
-% plot(time,10*ones(size(RangeStdDev)), 'linewidth', 2); hold on;
-% %plot(time,x_RMSE(1,:), 'linewidth', 2); hold on;
-% legend({'Ulaþýlan', 'Ýstenilen'}, 'fontsize', 16);
-% ylabel('Kök Ortalama Kare Hatasý (feet)', 'fontsize', 16); xlabel('Zaman (saniye)', 'fontsize', 16); grid on;
-% ax = gca;
-% ax.YTick = 0:10:120;
